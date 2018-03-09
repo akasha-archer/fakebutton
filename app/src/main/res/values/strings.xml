@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">FakeButton</string>
+
+    <string name="new_user_name_hint">Please enter name</string>
+    <string name="new_user_email_hint">Please enter email</string>
+    <string name="new_user_candidate_hint">Please enter candidate</string>
+    <string name="new_user_button">ADD NEW USER</string>
+
+    <string name="transfer_amount_hint">Enter a transfer amount</string>
+    <string name="transfer_id_hint">Enter user ID</string>
+    <string name="transfer_candidate_hint">Enter candidate</string>
+
+    <string name="name_placeholder">User Name</string>
+    <string name="email_placeholder">email</string>
+    <string name="candidate_placeholder">candidate</string>
+
+</resources>
