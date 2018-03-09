@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.akashaarcher.android.fakebutton.data.FakeButtonApiUtils;
+import com.akashaarcher.android.fakebutton.data.FakeButtonClient;
 import com.akashaarcher.android.fakebutton.data.FakeButtonService;
 import com.akashaarcher.android.fakebutton.dialog.TransferDialogFragment;
 import com.akashaarcher.android.fakebutton.model.Candidate;
@@ -36,6 +36,8 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
 
     private static String TAG = "UserListActivity";
     private FakeButtonAdapter adapter;
+
+    private FakeButtonClient fakeButtonClient;
 
     private List<Candidate> candidateList = new ArrayList<>();
 
@@ -59,8 +61,6 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
     @BindView(R.id.new_transfer_fab)
     FloatingActionButton newTransferFab;
 
-    private FakeButtonService fakeButtonService;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +70,6 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
 
         userListRv.setLayoutManager(new LinearLayoutManager(this));
         displayUsers();
-
-        fakeButtonService = FakeButtonApiUtils.getFakeButtonService();
 
         newTransferFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,14 +105,9 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
     }
 
     public void displayUsers() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        FakeButtonService api = retrofit.create(FakeButtonService.class);
-        Call<List<Candidate>> call = api.listUsers();
-
+        fakeButtonClient = FakeButtonClient.getInstance();
+        Call<List<Candidate>> call = fakeButtonClient.showAllUsers();
         call.enqueue(new Callback<List<Candidate>>() {
             @Override
             public void onResponse(Call<List<Candidate>> call, Response<List<Candidate>> response) {
@@ -131,14 +124,9 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
     }
 
     public void createNewUser(final Candidate candidate) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        FakeButtonService api = retrofit.create(FakeButtonService.class);
-        Call<Candidate> postCall = api.addNewUser(candidate);
-
+        fakeButtonClient = FakeButtonClient.getInstance();
+        Call<Candidate> postCall = fakeButtonClient.addUser(candidate);
         postCall.enqueue(new Callback<Candidate>() {
             @Override
             public void onResponse(Call<Candidate> call, Response<Candidate> response) {
@@ -175,14 +163,8 @@ public class UserListActivity extends AppCompatActivity implements TransferDialo
 
     private void postNewTransfer(Transfer transfer) {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        FakeButtonService api = retrofit.create(FakeButtonService.class);
-        Call<Transfer> postCall = api.createNewTransfer(transfer);
-
+        fakeButtonClient = FakeButtonClient.getInstance();
+        Call<Transfer> postCall = fakeButtonClient.makeNewTransfer(transfer);
         postCall.enqueue(new Callback<Transfer>() {
             @Override
             public void onResponse(Call<Transfer> call, Response<Transfer> response) {
